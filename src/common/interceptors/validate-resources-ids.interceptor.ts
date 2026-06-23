@@ -1,4 +1,10 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, NotFoundException } from '@nestjs/common'
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  NotFoundException,
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Observable } from 'rxjs'
 import { VALIDATE_RESOURCES_IDS_KEY } from 'src/consts'
@@ -18,35 +24,35 @@ export class ValidateResourcesIdsInterceptor implements NestInterceptor {
       context.getHandler(),
     )
 
-    if(!shouldValidate) {
-      return next.handle();
+    if (!shouldValidate) {
+      return next.handle()
     }
 
     // Validar o projectId da URL
     const request = context.switchToHttp().getRequest()
-    const projectId = request.params.projectId;
+    const projectId = request.params.projectId
 
     const project = await this.prisma.project.findFirst({
       where: {
         id: projectId,
-      }
+      },
     })
 
-    if(!project) {
-      throw new NotFoundException('Project not found');
+    if (!project) {
+      throw new NotFoundException('Project not found')
     }
 
     // Validar o taskId da URL, caso exista
-    const taskId = request.params.taskId;
-    if(taskId) {
+    const taskId = request.params.taskId
+    if (taskId) {
       const task = await this.prisma.task.findFirst({
         where: {
           projectId,
           id: taskId,
-        }
+        },
       })
-      if(!task) {
-        throw new NotFoundException('Task not found');
+      if (!task) {
+        throw new NotFoundException('Task not found')
       }
     }
 

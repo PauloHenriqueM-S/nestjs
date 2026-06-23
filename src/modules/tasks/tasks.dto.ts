@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { TaskPriority, TaskStatus } from '@prisma/client'
 import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
-export class TaskDTO {
+export class TaskRequestDTO {
   @ApiProperty({ description: 'Task title' })
   @IsString()
   @IsNotEmpty()

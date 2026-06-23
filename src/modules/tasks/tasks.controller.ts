@@ -11,10 +11,10 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common'
-import { TaskDTO } from './tasks.dto'
-import { TasksService } from './tasks.service'
-import { ValidateResourcesIdsInterceptor } from 'src/common/interceptors/validate-resources-ids.interceptor'
 import { ValidateResourcesIds } from 'src/common/decorators/validate-resources-ids.decorator'
+import { ValidateResourcesIdsInterceptor } from 'src/common/interceptors/validate-resources-ids.interceptor'
+import { TaskRequestDTO } from './tasks.dto'
+import { TasksService } from './tasks.service'
 
 @Controller({
   version: '1',
@@ -32,7 +32,7 @@ export class TasksController {
 
   @Post()
   @ValidateResourcesIds()
-  create(@Param('projectId', ParseUUIDPipe) projectId: string, @Body() data: TaskDTO) {
+  create(@Param('projectId', ParseUUIDPipe) projectId: string, @Body() data: TaskRequestDTO) {
     return this.tasksService.create(projectId, data)
   }
 
@@ -50,7 +50,7 @@ export class TasksController {
   update(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
-    @Body() data: TaskDTO,
+    @Body() data: TaskRequestDTO,
   ) {
     return this.tasksService.update(projectId, taskId, data)
   }
