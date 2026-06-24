@@ -1,0 +1,53 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common'
+import { UsersService } from './users.service'
+
+@Controller({
+  version: '1',
+  path: 'users',
+})
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Get()
+  findAll() {
+    return this.usersService.findAll()
+  }
+
+  @Get(':userId')
+  async findOne(@Param('userId', ParseUUIDPipe) userId: string) {
+    const user = await this.usersService.findById(userId)
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+    return user
+  }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() data: any) {
+    return this.usersService.create(data)
+  }
+
+  @Put(':userId')
+  async update(@Param('userId', ParseUUIDPipe) userId: string, @Body() data: any) {
+    return this.usersService.update(userId, data)
+  }
+
+  @Delete(':userId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.usersService.remove(userId)
+  }
+}
