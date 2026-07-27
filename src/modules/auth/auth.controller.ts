@@ -27,14 +27,6 @@ export class AuthController {
     return this.authService.signin(data)
   }
 
-  @Get('protected')
-  @UseGuards(AuthGuard('jwt'))
-  protected(@AuthenticatedUser() user: User) {
-    return {
-      message: `Authenticated! ${user.email}`,
-    }
-  }
-
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   forgotPassword(@Body() data: ForgotPasswordDTO) {
