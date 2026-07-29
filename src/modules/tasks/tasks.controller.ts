@@ -9,14 +9,22 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common'
-import { ApiBearerAuth } from '@nestjs/swagger'
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger'
 import { ValidateResourcesIds } from 'src/common/decorators/validate-resources-ids.decorator'
+import { QueryPaginationDTO } from 'src/common/dtos/query-pagination.dto'
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth/jwt-auth.guard'
 import { ValidateResourcesIdsInterceptor } from 'src/common/interceptors/validate-resources-ids.interceptor'
-import { TaskRequestDTO } from './tasks.dto'
+import { ApiPaginatedResponse } from 'src/common/swagger/api-paginated-response'
+import { TaskFullDTO, TaskListItemDTO, TaskRequestDTO } from './tasks.dto'
 import { TasksService } from './tasks.service'
 
 @Controller({
@@ -31,18 +39,25 @@ export class TasksController {
 
   @Get()
   @ValidateResourcesIds()
-  findAllByProject(@Param('projectId', ParseUUIDPipe) projectId: string) {
-    return this.tasksService.findAllByProject(projectId)
+  @ApiPaginatedResponse(TaskListItemDTO)
+  findAllByProject(
+    @Param('projectId', ParseUUIDPipe) projectId: string,
+    @Query() query?: QueryPaginationDTO,
+  ) {
+    return this.tasksService.findAllByProject(projectId, query)
   }
 
   @Post()
   @ValidateResourcesIds()
+  @ApiCreatedResponse({ type: TaskListItemDTO })
+  @HttpCode(HttpStatus.CREATED)
   create(@Param('projectId', ParseUUIDPipe) projectId: string, @Body() data: TaskRequestDTO) {
     return this.tasksService.create(projectId, data)
   }
 
   @Get(':taskId')
   @ValidateResourcesIds()
+  @ApiOkResponse({ type: TaskFullDTO })
   findOne(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
@@ -52,6 +67,8 @@ export class TasksController {
 
   @Put(':taskId')
   @ValidateResourcesIds()
+  @ApiOkResponse({ type: TaskListItemDTO })
+  @HttpCode(HttpStatus.OK)
   update(
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
@@ -62,6 +79,7 @@ export class TasksController {
 
   @Delete(':taskId')
   @ValidateResourcesIds()
+  @ApiNoContentResponse({ description: 'Task deleted successfully' })
   @HttpCode(HttpStatus.NO_CONTENT)
   delete(
     @Param('projectId', ParseUUIDPipe) projectId: string,
