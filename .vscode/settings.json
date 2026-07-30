@@ -16,5 +16,9 @@
   "[jsonc]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "prisma.pinToPrisma6": true
+  "prisma.pinToPrisma6": true,
+  "jest.runMode": {
+    "type": "on-save",
+    "testFileOnly": true,
+  }
 }

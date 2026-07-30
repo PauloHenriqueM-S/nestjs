@@ -14,7 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "biome check",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --verbose --testLocationInResults",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
@@ -35,6 +35,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "cloudinary": "^2.10.0",
+    "dotenv": "^17.4.2",
     "handlebars": "^4.7.9",
     "nodemailer": "^9.0.3",
     "passport-jwt": "^4.0.1",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",
+    "@faker-js/faker": "^9.9.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
@@ -73,12 +75,31 @@
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "module": "commonjs",
+            "resolvePackageJsonExports": false
+          }
+        }
+      ]
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": [
+      "../node_modules/dotenv/config"
+    ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^@/(.*)$": "<rootDir>/$1",
+      "^@prisma-generated/(.*)$": "<rootDir>/generated/prisma//$1",
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "verbose": true,
+    "testLocationInResults": true
   }
 }
