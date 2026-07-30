@@ -17,7 +17,7 @@ export class CloudinaryService {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           public_id: name,
-          foldedr: 'avatars',
+          folder: 'avatars',
         },
         (error, result) => {
           if (error || !result) {

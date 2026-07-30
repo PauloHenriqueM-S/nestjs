@@ -17,7 +17,7 @@ import {
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse } from '@nestjs/swagger'
-import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service'
+import { CloudinaryService } from 'src/common/services/cloudinary/cloudinary.service'
 import { QueryPaginationDTO } from 'src/common/dtos/query-pagination.dto'
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth/jwt-auth.guard'
 import { RequestContextService } from 'src/common/services/request-context/request-context.service'
