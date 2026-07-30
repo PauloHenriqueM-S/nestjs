@@ -46,7 +46,7 @@ describe('JwtAuthGuard', () => {
 
   it('should throw an error when super.canActivate throws', async () => {
     const error = new Error('Authentication failed');
-    const superCanActivate = jest.spyOn(AuthGuard('jwt').prototype, 'canActivate').mockRejectedValue(error);
+    jest.spyOn(AuthGuard('jwt').prototype, 'canActivate').mockRejectedValue(error);
 
     await expect(guard.canActivate(mockExecutionContext)).rejects.toThrow(error);
     expect(requestContextService.setUser).not.toHaveBeenCalled();
