@@ -114,7 +114,7 @@ export class TasksService {
   }
 
   async delete(projectId: string, taskId: string) {
-    await this.prisma.task.deleteMany({
+    await this.prisma.task.delete({
       where: {
         id: taskId,
         projectId,
